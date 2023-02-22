@@ -1,0 +1,60 @@
+
+<div id="services" class="glitch-target">
+	<div id="services-content" class="page-content">
+		<div>
+			<div class="sly-card-alt-header">
+				<h1>Star Loyal</h1>
+			</div>
+			<div id="services-header-content">
+				<p>SLY operates a problem solving agency called Star Loyal. We strive to make information and services available to all beings. Our services to the community include meta-game information as well as in-game activities as applicable.</p>
+			</div>
+			<div class="sly-card-alt-header">
+				<h1>Public Services</h1>
+			</div>
+			<div>
+				<div id="services-card-1" class="sly-card-border">
+					<div class="sly-card sly-card-selected" tabindex="-1" (click)="selectService($event, 0)"><h3>Education</h3></div>
+				</div>
+				<div id="services-card-2" class="sly-card-border">
+					<div id="services-btn-cust" class="sly-card" tabindex="-1" (click)="selectService($event, 1)"><h3>Customization</h3></div>
+				</div>
+				<div id="services-card-3" class="sly-card-border">
+					<div class="sly-card" tabindex="-1" (click)="selectService($event, 2)"><h3>Rescue</h3></div>
+				</div>
+				<div id="services-card-4" class="sly-card-border">
+					<div class="sly-card" tabindex="-1" (click)="selectService($event, 3)"><h3>Salvage</h3></div>
+				</div>
+			</div>
+		</div>
+		<div id="services-panel" class="sly-panel-border" animateOnScroll animationName="expand" [threshold]="0.1" intersectOffset="0%">
+			<div class="sly-panel">
+				<div class="sly-panel-header">
+					<h3>{{serviceTitle}}</h3>
+				</div>
+				<div class="sly-panel-content">
+					<div class="services-panel-element">
+						<div><h5>Context</h5></div>
+						<div>{{serviceContext}}</div>
+					</div>
+					<div class="services-panel-element">
+						<div><h5>Participant</h5></div>
+						<div>{{serviceParticipant}}</div>
+					</div>
+					<div class="services-panel-row">
+						<div class="services-panel-element">
+							<div><h5>Guild Cost</h5></div>
+							<div>{{serviceGC}}</div>
+						</div>
+						<div class="services-panel-element">
+							<div><h5>Client Cost</h5></div>
+							<div>{{serviceCC}}</div>
+						</div>
+					</div>
+					<div>
+						{{serviceDesc}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

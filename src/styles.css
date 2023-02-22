@@ -1,1 +1,475 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body, app-root { height: 100%; scroll-behavior: smooth !important;}
+body { margin: 0; font-family: 'Fira Code', 'Helvetica Neue', monospace; }
+h1, h2, h3, h4, h5 { font-family: 'Orbitron'; }
+
+html:focus-within {
+  scroll-behavior: smooth !important;
+}
+
+@media (max-width: 767px) {
+	.hidden-mobile {
+		display: none!important;
+	}
+}
+
+@media (min-width: 767px) {
+	.show-mobile {
+		display: none!important;
+	}
+}
+
+#sly-wrapper {
+	display: block;
+	height: 100vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	perspective: 10px;
+}
+
+main {
+	height: 100vh;
+	transform-style: preserve-3d;
+}
+
+.component-wrapper {
+  display: block;
+  height: 100vh;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* Panel-Start */
+.sly-panel {
+	/* background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.1 ) 0%, #0c100d 200%); */
+	width: 100%;
+	background: white;
+	clip-path: polygon(0 0, calc(100% - 1vmax) 0, 100% 1vmax, 100% calc(100% - 1.5vmax), calc(100% - 1.5vmax) 100%, 0 100%, 0 calc(100% - 2vmin), 0.5vmax calc(100% - 3vmin), 0.5vmax 2.5rem, 0 2rem);
+	filter: drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA) drop-shadow(-1px 0px 0px #64FFDA) drop-shadow(0px -1px 0px #64FFDA);
+}
+
+.sly-panel-border {
+	width: 100%;
+	filter: drop-shadow(0 8px 8px rgba( 0, 77, 64, 0.15 )) drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA);
+}
+
+.sly-panel-header {
+	background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.25 ) 0%, rgba( 12, 16, 13, 0.25 ) 200%);
+	border-bottom: 1px #64FFDA solid;
+	padding-left: 5px;
+	width: 100%;
+	height: 2.5rem;
+	text-align: center;
+}
+
+.sly-panel-header h3 {
+	line-height: 2.5rem;
+}
+
+.sly-panel-content {
+	width: 90%;
+	top: 2.5rem;
+	padding-left: 25px;
+}
+/* Panel-End */
+
+/* Panel-Alt-Start */
+.sly-panel-alt {
+	margin: 10px;
+	background: linear-gradient(rgba( 100, 255, 218, 0.01 ), rgba( 255, 255, 255, 0.01 ), rgba( 100, 255, 218, 0.01 ));
+	box-shadow: 0 8px 32px 0 rgba( 0, 77, 64, 0.17 );
+	backdrop-filter: blur( 7.5px );
+	-webkit-backdrop-filter: blur( 7.5px );
+	border-radius: 10px;
+	border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+/* Panel-Alt-End */
+
+/* Card-Start */
+.sly-card {
+	width: 200px;
+	height: 50px;
+	text-align: center;
+	line-height: 40px;
+	/* background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.1 ) 0%, #0c100d 200%); */
+	background: white;
+	clip-path: polygon(1vmax 0, 100% 0, 100% calc(100% - 1.5vmax), calc(100% - 1.5vmax) 100%, calc(100% - 3vmax) 100%, calc(100% - 3.5vmax) calc(100% - 0.5vmax), 3.5vmax calc(100% - 0.5vmax), 3vmax 100%, 0 100%, 0 1vmax);
+}
+
+.sly-card-selected {
+	background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.05 ) 0%, rgba( 12, 16, 13, 0.05 ) 200%);
+	outline:none;
+}
+
+.sly-card:hover {
+	cursor: pointer;
+}
+
+.sly-card:focus {
+	background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.05 ) 0%, rgba( 12, 16, 13, 0.05 ) 200%);
+	outline:none;
+}
+
+.sly-card-border {
+	filter: drop-shadow(0 3px 3px rgba( 0, 77, 64, 0.05 )) drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA);
+	/*filter: drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA) drop-shadow(-1px 0px 0px #64FFDA) drop-shadow(0px -1px 0px #64FFDA);*/
+}
+
+.sly-card-border:hover {
+	filter: drop-shadow(0 8px 8px rgba( 0, 77, 64, 0.15 )) drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA);
+	/*filter: drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA) drop-shadow(-1px 0px 0px #64FFDA) drop-shadow(0px -1px 0px #64FFDA);*/
+}
+/* Card-End */
+
+/* Card-Alt-Start */
+.sly-card-alt {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	max-width: 400px;
+	text-shadow: 3px 3px 5px rgba( 0, 77, 64, 0.5 );
+}
+
+.sly-card-alt-icon {
+	width: 60px;
+	height: 60px;
+	margin-top: 25px;
+	margin-right: 10px;
+
+	background:
+	  linear-gradient(to right bottom, black 4px, transparent 2px) 0 0,
+	  linear-gradient(to right top, black 4px, transparent 2px) 0 100%,
+	  linear-gradient(to left bottom, black 4px, transparent 2px) 100% 0,
+	  linear-gradient(to left top, black 4px, transparent 2px) 100% 100%,
+	  linear-gradient(to right bottom, black 4px, transparent 2px) 0 0,
+	  linear-gradient(to left bottom, black 4px, transparent 2px) 100% 0,
+	  linear-gradient(to right top, black 4px, transparent 2px) 0 100%,
+	  linear-gradient(to left top, black 4px, transparent 2px) 100% 100%,
+	  linear-gradient(to right, black 1px, transparent 1px) 0 50%,
+	  linear-gradient(to left, black 1px, transparent 1px) 100% 50%,
+	  linear-gradient(to bottom, black 1px, transparent 1px) 50% 0,
+	  linear-gradient(to top, black 1px, transparent 1px) 50% 100%;
+
+	background-repeat: no-repeat;
+	background-size: 10px 20px, 10px 20px, 10px 20px, 10px 20px, 20px 10px, 20px 10px, 20px 10px, 20px 10px, 10px 30px, 10px 30px, 30px 10px, 30px 10px;
+	text-align: center;
+	line-height: 70px;
+}
+
+.sly-card-alt-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.sly-card-alt-header {
+	border-bottom: 1px black solid;
+	box-shadow: 0 5px 5px -5px #64FFDA;
+}
+
+.sly-card-alt-header h1,
+.sly-card-alt-header h3 {
+	margin-block-end: 0;
+}
+/* Card-Alt-End */
+
+
+/* Dark-Panel-Start */
+.sly-dark-panel {
+	/* background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.1 ) 0%, #0c100d 200%); */
+	width: 100%;
+	background: #303030;
+	clip-path: polygon(0 0, calc(100% - 1vmax) 0, 100% 1vmax, 100% calc(100% - 1.5vmax), calc(100% - 1.5vmax) 100%, 0 100%, 0 calc(100% - 2vmin), 0.5vmax calc(100% - 3vmin), 0.5vmax 2.5rem, 0 2rem);
+	/*filter: drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA) drop-shadow(-1px 0px 0px #64FFDA) drop-shadow(0px -1px 0px #64FFDA);*/
+}
+
+.sly-dark-panel-border {
+	width: 100%;
+	filter: drop-shadow(0 4px 4px rgba( 0, 77, 64, 0.15 )) drop-shadow(0px 1px 0px #64FFDA) drop-shadow(1px 0px 0px #64FFDA);
+}
+
+.sly-dark-panel-header {
+	background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.25 ) 0%, rgba( 12, 16, 13, 0.25 ) 200%);
+	border-bottom: 1px #64FFDA solid;
+	padding-left: 5px;
+	width: 100%;
+	height: 2.5rem;
+	text-align: center;
+}
+
+.sly-dark-panel-header h3 {
+	line-height: 2.5rem;
+}
+
+.sly-dark-panel-content {
+	width: 90%;
+	top: 2.5rem;
+	padding-left: 25px;
+}
+/* Dark-Panel-End */
+
+/* Dark-Panel-Alt-Start */
+.sly-dark-panel-alt {
+	margin: 10px;
+	padding: 10px;
+	background: radial-gradient(ellipse at center, rgba( 100, 255, 218, 0.1 ) 0%, #0c100d 200%);
+	box-shadow: 0 8px 32px 0 rgba( 0, 77, 64, 0.17 );
+	backdrop-filter: blur( 2.5px );
+	-webkit-backdrop-filter: blur( 2.5px );
+	border-radius: 10px;
+	border: 1px solid rgba( 100, 255, 218, 0.5 );
+}
+/* Dark-Panel-Alt-End */
+
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+
+.bg-collapse {
+	animation: bg-collapse 0.6s forwards;
+}
+
+.bg-collapse-delayed {
+	animation: bg-collapse 0.6s forwards 1s;
+}
+
+@keyframes bg-collapse {
+	0% {
+		height: 2000px;
+		width: 2000px;
+	}
+	100% {
+		top: 25px;
+		height: 0px;
+		width: 0px;
+	}
+}
+
+.bg-expand {
+	animation: bg-expand 0.6s backwards;
+	animation-delay: 0.6s;
+}
+
+.bg-expand-delayed {
+	animation: bg-expand 0.6s backwards;
+	animation-delay: 1.6s;
+}
+
+@keyframes bg-expand {
+	0% {
+		height: 0px;
+		width: 0px;
+	}
+	100% {
+		height: 2000px;
+		width: 2000px;
+	}
+}
+
+.glitch{
+  animation: glitch 1s linear 1, glitch-2 0.5s linear 2, glitch-text 4s linear 1, glitch-collapse 0.1s linear 1 forwards;
+  animation-delay: 0s,1s,2s,3s;
+}
+
+@keyframes glitch {
+  2%,64%{
+    transform: translate(2px,0) skew(0deg);
+  }
+  4%,60%{
+    transform: translate(-2px,0) skew(0deg);
+  }
+  62%{
+    transform: translate(0,0) skew(5deg); 
+  }
+}
+
+@keyframes glitch-2 {
+  1%{
+    transform: rotateX(10deg) skewX(90deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+}
+
+@keyframes glitch-collapse {
+  1%{
+    transform: rotateX(10deg) skewX(90deg);
+  }
+  2%{
+    transform: rotateX(0deg) skewX(0deg);
+  }
+  100%{
+	transform: rotateX(10deg) skewX(90deg);
+  }
+}
+
+@keyframes glitch-text {
+    0% {
+        transform: translate3d(calc(-1 * 10px), 0, 0) scale3d(-1, -1, 1);
+        -webkit-clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
+        /*clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);*/
+		clip-path: polygon(0 20%, 100% 20%, 100% 21%, 0 21%);
+    }
+    2% {
+        -webkit-clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+        clip-path: polygon(0 33%, 100% 33%, 100% 33%, 0 33%);
+    }
+    4% {
+        -webkit-clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+        clip-path: polygon(0 44%, 100% 44%, 100% 44%, 0 44%);
+    }
+    5% {
+        -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 20%, 0 20%);
+        clip-path: polygon(0 50%, 100% 50%, 100% 20%, 0 20%);
+    }
+    6% {
+        -webkit-clip-path: polygon(0 70%, 100% 70%, 100% 70%, 0 70%);
+        clip-path: polygon(0 70%, 100% 70%, 100% 70%, 0 70%);
+    }
+    7% {
+        -webkit-clip-path: polygon(0 80%, 100% 80%, 100% 80%, 0 80%);
+        clip-path: polygon(0 80%, 100% 80%, 100% 80%, 0 80%);
+    }
+    8% {
+        -webkit-clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+        clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%);
+    }
+    9% {
+        -webkit-clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%);
+        clip-path: polygon(0 70%, 100% 70%, 100% 80%, 0 80%);
+    }
+    9.9% {
+        transform: translate3d(calc(-1 * 10px), 0, 0) scale3d(-1, -1, 1);
+    }
+    10%,
+    100% {
+        transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        clip-path: polygon(-25% 0, 125% 0, 125% 100%, -25% 100%);
+    }
+}
+
+.glitch:before,
+.glitch:after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+}
+
+.glitch:before {
+  animation: glitchTop 1s linear infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+}
+
+@keyframes glitchTop {
+  2%,64%{
+    transform: translate(2px,-2px);
+  }
+  4%,60%{
+    transform: translate(-2px,2px);
+  }
+  62%{
+    transform: translate(13px,-1px) skew(-13deg); 
+  }
+}
+
+.glitch:after {
+  animation: glitchBottom 1.5s linear infinite;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+}
+
+@keyframes glitchBottom {
+  2%,64%{
+    transform: translate(-2px,0);
+  }
+  4%,60%{
+    transform: translate(-2px,0);
+  }
+  62%{
+    transform: translate(-22px,5px) skew(21deg); 
+  }
+}
+
+@keyframes zoomOutLeft {
+  from {
+    opacity: 1;
+    transform: scale3d(5, 5, 5) translate3d(100px, 0, 0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale3d(1.475, 1.475, 0.475) translate3d(10px, 0, 0);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  
+}
+
+.zoomOutLeft {
+  animation-name: zoomOutLeft;
+  animation-duration: 0.5s;
+}
+
+@keyframes zoomOutRight {
+  from {
+    opacity: 1;
+    transform: scale3d(5, 5, 5) translate3d(-100px, 0, 0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale3d(1.475, 1.475, 0.475) translate3d(-10px, 0, 0);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  
+}
+
+.zoomOutRight {
+  animation-name: zoomOutRight;
+  animation-duration: 0.5s;
+}
+
+@keyframes expand {
+  from {
+    transform: scale(0.01, 0.1);
+	opacity: 1;
+  }
+
+  30% {
+    transform: scale(0.01, 1);
+	opacity: 1;
+  }
+  
+  100% {
+    transform: scale(1, 1);
+	opacity: 1;
+  }
+}
+
+.expand {
+  animation-name: expand;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.expand-again {
+  animation-name: expand;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.collapse {
+  animation-name: expand;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-direction: reverse;
+}

@@ -1,0 +1,84 @@
+
+#work {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	height: 100vh;
+	width: 100%;
+}
+
+@media (max-width: 767px) {
+	#work {
+		margin-top: 200px;
+	}
+}
+
+#work-header {
+	max-width: 80%;
+	margin: 10px auto 50px auto;
+}
+
+.next, .previous {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f1f1f1;
+  color: black;
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.carousel-item {
+  display: block;
+  position: absolute;
+  text-align: left;
+  padding: 10px;
+  transition: all 1s;
+  opacity: 0;
+  backdrop-filter: blur( 0px );
+  cursor: pointer;
+}
+
+.carousel-container {
+  margin: 0 auto;
+  width: 270px;
+  position: relative;
+  perspective: 1000px;
+}
+
+.carousel {
+  width: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.carousel-controls {
+	position: relative;
+	left: 0;
+	right: 0;
+	top: 57%;
+	margin-left: auto;
+	margin-right: auto;
+	width: 160px;
+}
+
+.posCenter {
+	transform: rotateY(0deg);
+	background: linear-gradient(rgba( 200, 200, 200, 0.75 ), rgba( 255, 255, 255, 1 ), rgba( 200, 200, 200, 0.75 ));
+	opacity: 1;
+}
+
+.posLeft {
+	transform: rotateY(300deg) rotateX(-20deg) translateZ(250px);
+	opacity: 1;
+}
+
+.posRight {
+	transform: rotateY(60deg) rotateX(-20deg) translateZ(250px);
+	opacity: 1;
+}
+
+.posLeft p,
+.posRight p {
+	filter: blur(5px);
+}

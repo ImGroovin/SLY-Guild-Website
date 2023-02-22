@@ -1,0 +1,22 @@
+#mission-content-header {
+	text-align: center;
+}
+
+#mission-content {
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	width: 50%;
+}
+
+@media (max-width: 767px) {
+	#mission-content {
+		width: 95%;
+	}
+}
+
+#star-mission-card-2 {
+	align-self: flex-end;
+}

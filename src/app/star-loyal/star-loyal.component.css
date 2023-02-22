@@ -1,0 +1,161 @@
+#star-loyal-section {
+  display: block;
+  height: 100vh;
+  transform-style: preserve-3d;
+}
+
+.object-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: none;
+  justify-content: center;
+  
+}
+
+.speed-1 {
+	transform: translateZ(0) scale(1) translateY(0vh);
+}
+
+.speed-2 {
+	transform: translateZ(5px) scale(0.5) translateY(0vh);
+}
+
+#section-wrapper-test {
+  display: block;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+
+#section-bg-container {
+	height: 260vh;
+	width: 200%;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	/* background: linear-gradient(rgba( 80, 80, 80, 1 ), rgba( 255, 0, 0, 1 )); */
+}
+
+@media (max-width: 767px) {
+	#section-bg-container {
+		height: 300vh;
+	}
+}
+
+#section-bg {
+	height: 400vh;
+	width: 400vh;
+	margin-top: -60vh;
+	margin-left: -100vw;
+  	border-radius: 50%;
+	background: linear-gradient(#ccc, #fff 40%, #ccc);
+}
+
+
+#widget-1 {
+	position: absolute;
+    top: 10vh;
+	left: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-2 {
+	position: absolute;
+    top: 30vh;
+    left: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-3 {
+	position: absolute;
+    top: 30vh;
+    right: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-4 {
+	position: absolute;
+    top: 120vh;
+    right: -20%;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-4 img {
+	width: 50%;
+}
+
+#widget-5 {
+	position: absolute;
+    top: 180vh;
+    left: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-6 {
+	position: absolute;
+    top: 270vh;
+    left: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-7 {
+	position: absolute;
+    top: 280vh;
+    left: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#widget-8 {
+	position: absolute;
+    top: 290vh;
+    right: 0;
+	filter: blur(1px);
+	opacity: 0.5;
+}
+
+#star-mission-section {
+	position: absolute;
+    top: 50vh;
+    left: 0;
+    right: 0;
+}
+
+#star-services-section {
+	position: absolute;
+    top: 200vh;
+    left: 0;
+    right: 0;
+}
+
+#star-work-section {
+	position: absolute;
+    top: 320vh;
+    left: 0;
+    right: 0;
+}
+
+.footer {
+  white-space: normal;
+  font-size: 14px;
+  justify-content: center;
+  position: absolute;
+  top: 260vh;
+}
+
+@media (max-width: 767px) {
+	.footer {
+		top: 274vh;
+		height: 100px;
+	}
+}

@@ -25,6 +25,7 @@
               "src/assets"
             ],
             "styles": [
+              "src/custom-theme.scss",
               "src/styles.css"
             ],
             "scripts": []
@@ -39,8 +40,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "6kb",
+                  "maximumError": "7kb"
                 }
               ],
               "outputHashing": "all"
@@ -89,10 +90,18 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+			  "src/assets/js/sly.js"
+			]
           }
         }
       }
+    }
+  },
+  "cli": {
+    "analytics": false,
+    "cache": {
+      "enabled": false
     }
   }
 }

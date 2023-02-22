@@ -1,0 +1,61 @@
+#shadow-landing {
+	display: flex;
+	height: 100%;
+	width: 80%;
+	align-items: center;
+	justify-content: center;
+	margin-left: auto;
+	margin-right: auto;
+	transform-style: preserve-3d;
+}
+
+#shadow-landing:before {
+	content: ' ';
+	display: block;
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 0.3;
+	background-image: url("/assets/images/sly-logo-black.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	transform: translateZ(-20px) scale(3);
+}
+
+.type {
+  font-family: monospace;
+  color:#0000;
+  background:
+    linear-gradient(-90deg,#00DFFC 5px,#0000 0) 10px 0,
+    linear-gradient(#FFFFFF 0 0) 0 0;
+  background-size:calc(var(--n)*1ch) 200%;
+  -webkit-background-clip:padding-box,text;
+  background-clip:padding-box,text;
+  background-repeat:no-repeat;
+  animation: 
+    b .7s infinite steps(1),   
+    t calc(var(--n)*.05s) steps(var(--n)) backwards;
+}
+
+#type-2 {
+  animation-delay: 9.5s;
+}
+
+#type-3 {
+  animation-delay: 19.5s;
+}
+
+#type-4 {
+  animation-delay: 32s;
+}
+
+@keyframes t{
+  from {background-size:0 200%}
+}
+
+@keyframes b{
+  50% {background-position:0 -100%,0 0}
+}

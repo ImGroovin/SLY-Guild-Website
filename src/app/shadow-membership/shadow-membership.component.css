@@ -1,0 +1,223 @@
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.page-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#bottom-wrapper {
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	max-width: 1000px;
+}
+
+#bottom-section {
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-columns:  repeat(2, minmax(0, 1fr));
+	grid-template-rows: repeat(7, minmax(0, 1fr));
+}
+
+#bottom-section-bg {
+	content: ' ';
+	opacity: 1;
+	background-image: url("/assets/images/spec_logos.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	grid-row: 1 / -1;
+	grid-column: 1 / -1;
+	min-height: 500px;
+}
+
+#bottom-section-1 {
+	grid-row: 2 / 5;
+	grid-column: 1 / 1;
+}
+
+#bottom-section-2 {
+	grid-row: 3 / 6;
+	grid-column: 2 / -1;
+}
+
+@media (max-width: 767px) {
+	#bottom-section-1 {
+		grid-row: 1 / 3;
+		grid-column: 1 / -1;
+	}
+	#bottom-section-2 {
+		grid-row: 3 / 5;
+		grid-column: 1 / -1;
+	}
+	#bottom-section-bg {
+		grid-row: 1 / 5;
+	}
+}
+
+#membership-panel-mobile {
+	width: 90%;
+	margin: 0 auto;
+}
+
+#panel-wrapper {
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 1000px;
+	max-height: 400px;
+	display: grid;
+	grid-gap: 0.5rem;
+	grid-template-columns:  repeat(20, minmax(0, 1fr));
+	grid-template-rows: repeat(20, minmax(0, 1fr));
+}
+
+#curve-menu {
+	grid-row: 1 / -1;
+	grid-column: 1 / 6;
+}
+
+#fancy-content {
+	grid-row: 1 / -1;
+	grid-column: 6 / 19;
+}
+
+#trigger1 {
+	all: unset;
+	cursor: pointer;
+	color: #64FFDA;
+	grid-row: 3 / 3;
+	grid-column: 4 / 8;
+}
+
+#trigger2 {
+	all: unset;
+	cursor: pointer;
+	color: #64FFDA;
+	grid-row: 5 / 5;
+	grid-column: 2 / 4;
+	margin-left: 1.5em;
+}
+
+#trigger3 {
+	all: unset;
+	cursor: pointer;
+	color: #64FFDA;
+	grid-row: 9 / 9;
+	grid-column: 2 / 5;
+	margin-left: 1.5em;
+}
+
+#trigger4 {
+	all: unset;
+	cursor: pointer;
+	color: #64FFDA;
+	grid-row: 12 / 12;
+	grid-column: 3 / 6;
+}
+
+#benefits {
+	grid-row: 4 / 4;
+	grid-column: 10 / -1;
+	margin-left: 1em;
+}
+
+#benefits {
+	position: relative;
+}
+
+#benefits div {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	max-width: 430px;
+}
+
+#trigger1:focus ~ #benefits #bene-fun {
+	opacity: 1;
+}
+
+#trigger2:focus ~ #benefits #bene-training {
+	opacity: 1;
+}
+
+#trigger3:focus ~ #benefits #bene-funding {
+	opacity: 1;
+}
+
+#trigger4:focus ~ #benefits #bene-discounts {
+	opacity: 1;
+}
+
+
+.menu-trigger:focus ~ #fancy-content #fireCircles + #container #containerBox {
+  animation: expand1 0.5s ease forwards;
+}
+
+@keyframes expand1 {
+  0% {
+	  d: path("M 250 283 c 19.64 0.515 28.781 -0.462 41.5 -12 l 11.5 -12 c 9.98 -7.571 16.62 -9.831 30.5 -10 h 127.5 c 11.484 -0.409 17.715 1.899 28.5 10 l 13 12 c 9.098 9.05 15.207 11.924 27.5 14 h 327.5 v 0 l 62.5 -2 c 11.148 -3.896 20.243 -6.824 28.5 -14 l 72.5 -72.5 c 5.15 -7.217 7.68 -11.513 11 -20 L 1032.5 108 v -41 h -1.5 v -25.25 v -25.25 c 0.04 -9.1283 -2.76 -12.3442 -13 -14.5 h -53 h -793.5 l -7.529 -0.6316 C 227.189 8.8461 272.536 56.6375 285 116.5 l -2.75 0.5 c 12.64 101.955 -49.038 162.651 -139.75 166 c 0 0 0 0.5 0 0.5 v -2 C 72.2634 288.8776 9.8748 229.1392 5.4999 172.5 v 112.5 l 189.5001 -2 h 55"); /* 32 */
+  }
+  100% {
+	  d: path("M 250 450 c 19.64 0.515 28.781 -0.462 41.5 -12 l 11.5 -12 c 9.98 -7.571 16.62 -9.831 30.5 -10 h 127.5 c 11.484 -0.409 17.715 1.899 28.5 10 l 13 12 c 9.098 9.05 15.207 11.924 27.5 14 h 327.5 v 0 l 62.5 -2 c 11.148 -3.896 20.243 -6.824 28.5 -14 l 72.5 -72.5 c 5.15 -7.217 7.68 -11.513 11 -20 L 1032.5 108 v -41 h -1.5 v -25.25 v -25.25 c 0.04 -9.1283 -2.76 -12.3442 -13 -14.5 h -53 h -793.5 l -7.529 -0.6316 C 227.189 8.8461 272.536 56.6375 285 116.5 l -2.75 0.5 c 12.64 101.955 -49.038 162.651 -139.75 166 c 0 0 0 0.5 0 0.5 v -2 C 72.2634 288.8776 9.8748 229.1392 5.4999 172.5 v 279.5 l 189.5001 -2 h 55");
+  }
+}
+
+.menu-trigger:focus ~ #fancy-content #fireCircles #outerCircle {
+  animation: rotate-c 1s ease forwards;
+}
+
+.menu-trigger:focus ~ #fancy-content #fireCircles #innerCircle {
+  animation: rotate-cc 1s ease forwards;
+}
+
+.menu-trigger:focus ~ #fancy-content #fireCircles #middleCircle {
+  animation: rotate-c1 0.5s ease forwards;
+}
+
+.menu-trigger:focus ~ #fancy-content #fireCircles + #container #containerRightBottom {
+  position: relative;
+  animation: adjust-pos 0.5s ease forwards;
+}
+
+.menu-trigger:focus ~ #fancy-content #fireCircles + #container #loadingLights {
+  position: relative;
+  animation: adjust-pos 0.5s ease forwards;
+}
+
+#fireCircles,
+#innerCircle,
+#outerCircle,
+#middleCircle {
+  transition: all 1s ease;
+  transform-origin: center;
+  transform-box: fill-box;
+  pointer-events: bounding-box;
+}
+
+@keyframes rotate-c {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes rotate-c1 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(250deg); }
+}
+
+@keyframes rotate-cc {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-120deg); }
+}
+
+@keyframes adjust-pos {
+  from { transform: translate(0px, 0px); }
+  to { transform: translate(0px, 165px); }
+}

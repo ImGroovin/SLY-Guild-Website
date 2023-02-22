@@ -1,0 +1,31 @@
+<div id="work" class="glitch-target">
+	<div id="work-content" class="page-content">
+		<div id="work-header" class="sly-panel-alt">
+			<p>We perform research and development because we enjoy the work. Most importantly, we believe that everyone should have access to information. We strive to make all of our work public and freely available, with a complete explanation of our methodology. Our hope is that our work will inspire others to expand on our research and development, or perhaps take on a new project of their own interests.</p>
+			<p>Vist our Github page to view our projects:</p>
+			<p><a href="https://github.com/ImGroovin" target="_blank">https://github.com/ImGroovin</a></p>
+		</div>
+		<div class="carousel-container">
+			<div class="carousel">
+				<div id="item1" class="carousel-item sly-panel-alt" tabindex="-1" (click)="workSelect($event, 1)" animateOnScroll animationName="posLeft" [threshold]="0.3">
+					<h4>Solana and Discord Utility</h4>
+					<p>We have created a proof of concept which demonstrates assigning Discord roles based on the user’s ownership of Solana SFT/NFTs. No database is required and there are no transaction fees incurred through this method.</p>
+					<p>This could be used to grant access to special Discord channels, assign honorary titles, or perhaps even membership.</p>
+				</div>
+				<div id="item2" class="carousel-item sly-panel-alt" tabindex="-1" (click)="workSelect($event, 2)" animateOnScroll animationName="posCenter" [threshold]="0.3">
+					<h4>Star Atlas Auto Re-supply</h4>
+					<p>We have published an in-browser utility script for interaction with the Star Atlas SCORE minigame. This allows a user to automatically re-supply their ships without user interaction. The script is completely open and the user has full control, rather than relying on a third party website.</p>
+				</div>
+				<div id="item3" class="carousel-item sly-panel-alt" tabindex="-1" (click)="workSelect($event, 3)" animateOnScroll animationName="posRight" [threshold]="0.3">
+					<h4>Town Star Auto-sell</h4>
+					<p>We have published an in-browser utility script for interaction with the game Town Star. This provides several convenience features to enhance user experience such as auto-sell, town location discovery, and craft production statistics. This script was the first free, public, open source tool of its kind; and although it is no longer maintained, several forks have been created.</p>
+				</div>
+			</div>
+		</div>
+		<div class="carousel-controls">
+			<a href="#" class="previous" (click)="workSelect($event, 1)">1</a>
+			<a href="#" class="previous" (click)="workSelect($event, 2)">2</a>
+			<a href="#" class="next" (click)="workSelect($event, 3)">3</a>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,75 @@
+#shadow-code-panel .sly-dark-panel {
+	max-width: 85%;
+	height: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#shadow-code-1, #shadow-code-2, #shadow-code-3 {
+	width: 400px;
+	height: 150px;
+	max-height: 200px;
+}
+
+#shadow-code-content {
+  display: grid;
+  width: 400px;
+  aspect-ratio: 2/1;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#shadow-code-content > div {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: m 12s infinite linear;
+  transform-origin: 50% 200%;
+}
+
+@media (max-width: 767px) {
+	#shadow-code-content > div {
+		width: 300%;
+		transform-origin: 50% 120%;
+	}
+}
+
+li::marker {
+	font-family: "Material Symbols Outlined";
+	content: "chevron_right";
+	color: #64FFDA;
+}
+
+#shadow-code-content > div:nth-child(2) { animation-delay: 4s; }
+#shadow-code-content > div:nth-child(3) { animation-delay: 8s; }
+
+#shadow-code-content > div > div{
+	animation: m1 12s infinite linear;
+}
+
+#shadow-code-content > div:nth-child(2) > div { animation-delay: 4s; }
+#shadow-code-content > div:nth-child(3) > div { animation-delay: 8s; }
+
+#triangle-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#triangle {
+	animation: m 12s infinite linear;
+	transform-origin: 50% 50%;
+}
+
+@keyframes m {
+  4%, 33% { transform: rotate(120deg); }
+  37%, 66% { transform: rotate(240deg); }
+  70%, 100% { transform: rotate(360deg); }
+}
+
+@keyframes m1 {
+  4%, 33% { transform: rotate(-120deg); }
+  37%, 66% { transform: rotate(-240deg); }
+  70%, 100% { transform: rotate(-360deg); }
+}
