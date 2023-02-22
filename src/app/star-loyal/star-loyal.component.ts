@@ -1,5 +1,4 @@
 import { Component, HostBinding, Host, ViewChildren } from '@angular/core';
-import { PageScrollInstance, PageScrollService } from 'ngx-page-scroll-core';
 
 import { StarMissionComponent } from '../star-mission/star-mission.component';
 import { StarServicesComponent } from '../star-services/star-services.component';
