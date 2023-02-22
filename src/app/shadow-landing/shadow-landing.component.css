@@ -35,9 +35,22 @@
   -webkit-background-clip:padding-box,text;
   background-clip:padding-box,text;
   background-repeat:no-repeat;
-  animation: 
+  /*animation: 
     b .7s infinite steps(1),   
-    t calc(var(--n)*.05s) steps(var(--n)) backwards;
+    t calc(var(--n)*.05s) steps(var(--n)) backwards;*/
+}
+
+.type-bg {
+	animation-name: type-bg;
+	animation-duration: 0.7s;
+	animation-timing-function: steps(1);
+}
+
+.type-text {
+	animation-name: type-text;
+	animation-duration: calc(var(--n)*.05s);
+	animation-timing-function: steps(var(--n));
+	animation-fill-mode: backwards;
 }
 
 #type-2 {
@@ -52,10 +65,10 @@
   animation-delay: 32s;
 }
 
-@keyframes t{
+@keyframes type-text{
   from {background-size:0 200%}
 }
 
-@keyframes b{
+@keyframes type-bg{
   50% {background-position:0 -100%,0 0}
 }
