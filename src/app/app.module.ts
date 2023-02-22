@@ -60,6 +60,8 @@ export function playerFactory(): any {
 	RouterModule.forRoot([
 		{path: 'star-loyal', title: 'Star Loyal', component: StarLoyalComponent, data: {navTitle: 'Star Loyal'}},
 		{path: 'shadow-loyal', title: 'Shadow Loyal', component: ShadowLoyalComponent, data: {navTitle: 'Shadow Loyal'}},
+		{path: '',   redirectTo: '/star-loyal', pathMatch: 'full'},
+		{path: '**', component: StarLoyalComponent},
 		/*{path: 'star-mission', title: 'Mission', component: StarMissionComponent, data: {navTitle: 'Mission'}},
 		{path: 'star-services', title: 'Services', component: StarServicesComponent, data: {navTitle: 'Services'}},
 		{path: 'star-work', title: 'Work', component: StarWorkComponent, data: {navTitle: 'Our Work'}},
