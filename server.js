@@ -27,7 +27,7 @@ const server = http.createServer(async (req, res) => {
   const type = extension ? types[extension] : types.html;
   const supportedExtension = Boolean(type);
 
-  if (!supportedExtension) {
+  if (!supportedExtension && !req.url.includes('api')) {
     res.writeHead(404, { 'Content-Type': 'text/html' });
     res.end('404: File not found');
     return;
