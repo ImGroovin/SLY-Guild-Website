@@ -7,7 +7,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/router": "^15.1.0",
     "@coral-xyz/anchor": "^0.27.0",
     "@cyclic.sh/dynamodb": "^0.0.33",
     "@solana/web3.js": "^1.76.0"
