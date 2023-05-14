@@ -14,8 +14,6 @@ const types = {
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',
   gif: 'image/gif',
-  json: 'application/json',
-  xml: 'application/xml',
 };
 
 const root = path.normalize(path.resolve(directoryName));
@@ -35,7 +33,7 @@ const server = http.createServer(async (req, res) => {
 
   let fileName = req.url;
   if (req.url === '/') fileName = 'index.html';
-  else if (!extension) {
+  else if (!extension && !req.url.includes('api')) {
     try {
       fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
       fileName = req.url + '.html';
