@@ -36,7 +36,7 @@ const server = http.createServer(async (req, res) => {
   else if (!extension && !req.url.includes('api')) {
     try {
       fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
-      fileName = req.url + '.html';
+      fileName = req.url + '.httml';
     } catch (e) {
       fileName = path.join(req.url, 'index.html');
     }
