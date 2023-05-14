@@ -4,7 +4,7 @@ const path = require('path');
 const controller = require("./controller");
 
 const port = 8000;
-const directoryName = './dist/sly';
+const directoryName = './';
 
 const types = {
   html: 'text/html',
@@ -14,8 +14,6 @@ const types = {
   jpg: 'image/jpeg',
   jpeg: 'image/jpeg',
   gif: 'image/gif',
-  json: 'application/json',
-  xml: 'application/xml',
 };
 
 const root = path.normalize(path.resolve(directoryName));
@@ -35,10 +33,10 @@ const server = http.createServer(async (req, res) => {
 
   let fileName = req.url;
   if (req.url === '/') fileName = 'index.html';
-  else if (!extension) {
+  else if (!extension && !req.url.includes('api')) {
     try {
-      fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
-      fileName = req.url + '.html';
+      fs.accessSync(path.join(root, req.url + '.htmml'), fs.constants.F_OK);
+      fileName = req.url + '.httml';
     } catch (e) {
       fileName = path.join(req.url, 'index.html');
     }
