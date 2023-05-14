@@ -1,0 +1,34 @@
+<div class="filter-header">
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search">
+  </mat-form-field>
+</div>
+
+<mat-table [dataSource]="dataSource" matSort matSortStart="desc">
+
+  <ng-container matColumnDef="acct">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Account </th>
+    <td mat-cell *matCellDef="let element"> {{element.acct}} </td>
+  </ng-container>
+  
+  <ng-container matColumnDef="pzCnt">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Prizes </th>
+    <td mat-cell *matCellDef="let element"> {{element.pzCnt}} </td>
+  </ng-container>
+ 
+  <ng-container *ngFor="let disCol of displayedPrizeColumns; let colIndex = index" matColumnDef="{{disCol}}">
+	<th mat-header-cell *matHeaderCellDef mat-sort-header> {{disCol}} </th>
+    <td mat-cell *matCellDef="let element">
+		<div *ngIf="element[disCol]"><strong>Tier Total: {{element[disCol] && element[disCol].tierCnt ? element[disCol].tierCnt : ''}}</strong></div>
+		<div *ngFor="let pzItem of element[disCol] | keyvalue;">
+			<ng-container *ngIf="pzItem.key != 'tierCnt'">
+				{{pzItem.key}}: {{pzItem.value}}
+			</ng-container>
+		</div>
+	</td>
+  </ng-container>
+  
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</mat-table>
+<mat-paginator #paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>

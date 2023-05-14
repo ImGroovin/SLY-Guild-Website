@@ -31,6 +31,7 @@
 				<button *ngIf=!isDark mat-menu-item (click)="scrollToSection($event, 'star-mission-section')" aria-current="page">Mission</button>
 				<button *ngIf=!isDark mat-menu-item (click)="scrollToSection($event, 'star-services-section')" aria-current="page">Services</button>
 				<button *ngIf=!isDark mat-menu-item (click)="scrollToSection($event, 'star-work-section')" aria-current="page">Our Work</button>
+				<button *ngIf=!isDark mat-menu-item routerLink="/tool-sage" aria-current="page">SAGE:EV</button>
 				<button *ngIf=isDark mat-menu-item (click)="scrollToSection($event, 'shadow-loyal-section')" aria-current="page">Shadow Loyal</button>
 				<button *ngIf=isDark mat-menu-item (click)="scrollToSection($event, 'shadow-membership-section')" aria-current="page">Membership</button>
 				<button *ngIf=isDark mat-menu-item (click)="scrollToSection($event, 'shadow-ops-section')" aria-current="page">Shadow Ops</button>
