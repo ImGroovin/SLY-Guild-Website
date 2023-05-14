@@ -4,7 +4,7 @@ const path = require('path');
 const controller = require("./controller");
 
 const port = 8000;
-const directoryName = './dist/sly';
+const directoryName = './';
 
 const types = {
   html: 'text/html',
