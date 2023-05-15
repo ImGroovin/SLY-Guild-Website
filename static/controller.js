@@ -143,7 +143,9 @@ class Controller {
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
 					let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
-					return this.getEVPrizes(evAccount, dbPrizeTS);
+					let tempRet = this.getEVPrizes(evAccount, dbPrizeTS);
+					console.log(tempRet);
+					return tempRet
 				})
 				.then((tempAcctPrizes) => {
 					console.log(evAccount);
