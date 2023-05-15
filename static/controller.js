@@ -186,16 +186,18 @@ class Controller {
 				console.log(e);
 			}
 			this.dbData = dbDataRaw.Items;
+			console.log(this.dbData);
 			console.log('Writing DB');
 			let promisesWrite = [];
-			for (const evAccount in evAccounts) {
+			let evAccount = Object.keys(evAccounts)[0];
+			//for (const evAccount in evAccounts) {
 				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
 					.then(() => 0)
 					.catch((error) => {
 						console.error(error);
 					})
 				)
-			}
+			//}
 			
 			let innerRetStatus = Promise.all(promisesWrite).then(() => {
 				console.log("Write done: " + Date.now());
