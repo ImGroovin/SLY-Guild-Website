@@ -142,7 +142,7 @@ class Controller {
 			promises.push(dbAccounts.item(evAccount).get()
 			.catch((e) => console.log(e))
 			.then((dbAccount) => {
-				if (index % 5 == 0) {
+				if (iter % 5 == 0) {
 					console.log(`[${iter}]${evAccount}`);
 				}
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
