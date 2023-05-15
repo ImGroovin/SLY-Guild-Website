@@ -150,16 +150,14 @@ class Controller {
 					console.log(`tempRet: ${tempRet}`);
 					return tempRet
 				})
-				/*
 				.then((tempAcctPrizes) => {
-					console.log(tempAcctPrizes);
+					console.log(`Prizes: ${tempAcctPrizes}`);
 					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
 					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 					return "something"
 				})
-				*/
 			//)
 			iter++;
 		//}
