@@ -59,7 +59,7 @@ class Controller {
 	async addEntry(evAccount, evAccountData) {
 	//const addEntry = async(evAccount, evAccountData) => {
 		//let dbAccountAndFrags = dbData.filter(o => o.pk === `accounts#${evAccount}`);
-		console.log(`Starting addEntry: ${evAccount} - ${evAccountData}`);
+		//console.log(`Starting addEntry: ${evAccount} - ${evAccountData}`);
 		let dbAccount = this.dbData.filter(o => o.pk === `accounts#${evAccount}` && o.sk === `accounts#${evAccount}`);
 		let dbPzCnt = dbAccount[0] && dbAccount[0].pzCnt ? dbAccount[0].pzCnt : 0;
 		let dbMvCnt = dbAccount[0] && dbAccount[0].mvCnt ? dbAccount[0].mvCnt : 0;
@@ -138,7 +138,7 @@ class Controller {
 		console.log('Getting prizes');
 		let promises = [];
 		let iter = 0;
-		evAccounts = Object.fromEntries(Object.entries(evAccounts).slice(1, 10))
+		//evAccounts = Object.fromEntries(Object.entries(evAccounts).slice(1, 10))
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
 		//let evAccount = Object.keys(evAccounts)[0];
@@ -146,14 +146,14 @@ class Controller {
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
-					console.log('Fetching');
+					//console.log('Fetching');
 					let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
 					let tempRet = this.getEVPrizes(evAccount, dbPrizeTS);
 					console.log(`tempRet: ${tempRet}`);
 					return tempRet
 				})
 				.then((tempAcctPrizes) => {
-					console.log(`Prizes: ${tempAcctPrizes}`);
+					//console.log(`Prizes: ${tempAcctPrizes}`);
 					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
 					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
