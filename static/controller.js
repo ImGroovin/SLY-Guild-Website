@@ -141,7 +141,7 @@ class Controller {
 		//for (const evAccount in evAccounts) {
 		let evAccount = Object.keys(evAccounts)[0];
 		console.log(evAccount);
-			//promises.push(
+			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
 					console.log('Fetching');
@@ -158,13 +158,13 @@ class Controller {
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 					return "something"
 				})
-			//)
+			)
 			iter++;
 		//}
 		console.log('Loop done');
 		console.log(promises);
 		console.log(promises.length);
-		Promise.all(promises).then(() => {
+		let retStatus = Promise.all(promises).then(() => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
 			//		throw error;
@@ -178,26 +178,26 @@ class Controller {
 				},
 				TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
 			};
-			ddbClient.send(new ScanCommand(params))
-			.then((dbDataRaw) => {
-				this.dbData = dbDataRaw.Items;
-				console.log('Writing DB');
-				let promisesWrite = [];
-				for (const evAccount in evAccounts) {
-					promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-					.then(() => 0))
-				}
-				
-				Promise.all(promisesWrite).then(() => {
-					console.log("Write done: " + Date.now());
-					console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
-					return {status: 'OK'};
-				});
+			let dbDataRaw = await ddbClient.send(new ScanCommand(params))
+			this.dbData = dbDataRaw.Items;
+			console.log('Writing DB');
+			let promisesWrite = [];
+			for (const evAccount in evAccounts) {
+				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
+				.then(() => 0))
+			}
+			
+			let innerRetStatus = Promise.all(promisesWrite).then(() => {
+				console.log("Write done: " + Date.now());
+				console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+				return {status: 'OK'};
 			});
+			return innerRetStatus;
 		})
 		.catch((error) => {
 			console.error(error);
 		});
+		return retStatus;
 	}
 
     async getEVAccounts() {
