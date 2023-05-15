@@ -142,7 +142,6 @@ class Controller {
 			.catch((e) => console.log(e))
 			.then((dbAccount) => {
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
-				console.log(`${evAccount}:${dbPrizeTS}`);
 				return this.getEVPrizes(evAccount, dbPrizeTS);
 			})
 			.then((tempAcctPrizes) => {
@@ -150,7 +149,6 @@ class Controller {
 				evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 				evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 				evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
-				console.log(`Added ${evAccount}`);
 			})
 			.then(() => 0))
 		}
