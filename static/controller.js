@@ -140,7 +140,7 @@ class Controller {
 		console.log(Object.keys(evAccounts).length);
 		//for (const evAccount in evAccounts) {
 		let evAccount = Object.keys(evAccounts)[0];
-			promises.push(
+			//promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
 					console.log('Fetching');
@@ -158,7 +158,7 @@ class Controller {
 					return "something"
 				})
 				.then((tempAcctPrizes) => {return "something last";})
-			)
+			//)
 			iter++;
 		//}
 		console.log('Loop done');
