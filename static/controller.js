@@ -181,7 +181,7 @@ class Controller {
 			};
 			let dbDataRaw = {Items: {}}
 			try {
-				let dbDataRaw = await ddbClient.send(new ScanCommand(params))
+				dbDataRaw = await ddbClient.send(new ScanCommand(params))
 			} catch(e) {
 				console.log(e);
 			}
