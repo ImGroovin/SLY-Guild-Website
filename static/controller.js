@@ -138,11 +138,11 @@ class Controller {
 		console.log('Getting prizes');
 		let promises = [];
 		let iter = 0;
-		evAccounts = Object.entries(evAccounts).slice(0,10)
+		evAccounts = Object.fromEntries(Object.entries(evAccounts).slice(1, 10))
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
 		//let evAccount = Object.keys(evAccounts)[0];
-		console.log(evAccount);
+			console.log(evAccount);
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
