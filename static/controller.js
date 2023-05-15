@@ -193,7 +193,7 @@ class Controller {
 					.then(() => 0)
 					.catch((error) => {
 						console.error(error);
-					});
+					})
 				)
 			}
 			
