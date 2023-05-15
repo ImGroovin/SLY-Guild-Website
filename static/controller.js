@@ -142,6 +142,7 @@ class Controller {
 			.catch((e) => console.log(e))
 			.then((dbAccount) => {
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
+				console.log(`${evAccount}:${dbPrizeTS}`);
 				return this.getEVPrizes(evAccount, dbPrizeTS);
 			})
 			.then((tempAcctPrizes) => {
