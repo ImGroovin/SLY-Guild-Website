@@ -3,7 +3,7 @@ const http = require('http');
 const path = require('path');
 const controller = require("./controller");
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 const directoryName = './';
 
 const types = {
@@ -35,10 +35,10 @@ const server = http.createServer(async (req, res) => {
   if (req.url === '/') fileName = 'index.html';
   else if (!extension && !req.url.includes('api')) {
     try {
-      fs.accessSync(path.join(root, req.url + '.htmml'), fs.constants.F_OK);
+      fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
       fileName = req.url + '.httml';
     } catch (e) {
-      fileName = path.join(req.url, 'index.httmml');
+      fileName = path.join(req.url, 'index.html');
     }
   }
 
@@ -47,9 +47,9 @@ const server = http.createServer(async (req, res) => {
 	res.writeHead(200, { "Content-Type": "application/json" });
 	res.end(JSON.stringify(sageev));
   } else if (req.url === "/api/updateev" && req.method === "GET") {
-    const sageev = await new controller().updateEVAccounts();
+    const updateev = await new controller().updateEVAccounts();
 	res.writeHead(200, { "Content-Type": "application/json" });
-	res.end(JSON.stringify(sageev));
+	res.end(JSON.stringify(updateev));
   } else {
     const filePath = path.join(root, fileName);
     const isPathUnderRoot = path

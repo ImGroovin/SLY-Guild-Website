@@ -134,7 +134,7 @@ class Controller {
 				console.log(e);
 			}
 		}
-		
+		console.log('Getting prizes');
 		let promises = [];
 		for (const evAccount in evAccounts) {
 			promises.push(dbAccounts.item(evAccount).get()
@@ -156,6 +156,7 @@ class Controller {
 			//		throw error;
 			//	}
 			//});
+			console.log('Getting DB');
 			let params = {
 				FilterExpression: "begins_with(pk,:pk)",
 				ExpressionAttributeValues: {
@@ -166,7 +167,7 @@ class Controller {
 			ddbClient.send(new ScanCommand(params))
 			.then((dbDataRaw) => {
 				this.dbData = dbDataRaw.Items;
-				
+				console.log('Writing DB');
 				let promisesWrite = [];
 				for (const evAccount in evAccounts) {
 					promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
@@ -179,6 +180,7 @@ class Controller {
 				});
 			});
 		});
+		return {status: 'OK'};
 	}
 
     async getEVAccounts() {
