@@ -136,11 +136,15 @@ class Controller {
 		}
 		console.log('Getting prizes');
 		let promises = [];
+		let iter = 0;
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
 			promises.push(dbAccounts.item(evAccount).get()
 			.catch((e) => console.log(e))
 			.then((dbAccount) => {
+				if (index % 5 == 0) {
+					console.log(`[${iter}]${evAccount}`);
+				}
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
 				return this.getEVPrizes(evAccount, dbPrizeTS);
 			})
@@ -151,6 +155,7 @@ class Controller {
 				evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 			})
 			.then(() => 0))
+			iter++;
 		}
 		Promise.all(promises).then(() => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
