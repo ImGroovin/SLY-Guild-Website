@@ -150,6 +150,7 @@ class Controller {
 					console.log(`tempRet: ${tempRet}`);
 					return tempRet
 				})
+				/*
 				.then((tempAcctPrizes) => {
 					console.log(tempAcctPrizes);
 					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
@@ -158,6 +159,7 @@ class Controller {
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 					return "something"
 				})
+				*/
 			//)
 			iter++;
 		//}
