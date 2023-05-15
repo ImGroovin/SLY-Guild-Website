@@ -140,6 +140,7 @@ class Controller {
 		console.log(Object.keys(evAccounts).length);
 		//for (const evAccount in evAccounts) {
 		let evAccount = Object.keys(evAccounts)[0];
+		console.log(evAccount);
 			//promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
@@ -157,7 +158,6 @@ class Controller {
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 					return "something"
 				})
-				.then((tempAcctPrizes) => {return "something last";})
 			//)
 			iter++;
 		//}
