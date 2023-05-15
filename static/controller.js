@@ -150,13 +150,14 @@ class Controller {
 					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
+					resolve("something");
 				})
 			)
 			iter++;
 		}
 		console.log('Loop done');
+		console.log(promises);
 		console.log(promises.length);
-		console.log(promises[0]);
 		Promise.all(promises).then(() => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
@@ -189,7 +190,7 @@ class Controller {
 			});
 		})
 		.catch((error) => {
-			console.error(error.message);
+			console.error(error);
 		});
 	}
 
