@@ -142,6 +142,7 @@ class Controller {
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
+					console.log('Fetching');
 					let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
 					let tempRet = this.getEVPrizes(evAccount, dbPrizeTS);
 					console.log(tempRet);
