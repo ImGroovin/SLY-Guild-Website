@@ -59,6 +59,7 @@ class Controller {
 	async addEntry(evAccount, evAccountData) {
 	//const addEntry = async(evAccount, evAccountData) => {
 		//let dbAccountAndFrags = dbData.filter(o => o.pk === `accounts#${evAccount}`);
+		console.log(`Starting addEntry: ${evAccount} - ${evAccountData}`);
 		let dbAccount = this.dbData.filter(o => o.pk === `accounts#${evAccount}` && o.sk === `accounts#${evAccount}`);
 		let dbPzCnt = dbAccount[0] && dbAccount[0].pzCnt ? dbAccount[0].pzCnt : 0;
 		let dbMvCnt = dbAccount[0] && dbAccount[0].mvCnt ? dbAccount[0].mvCnt : 0;
@@ -178,13 +179,22 @@ class Controller {
 				},
 				TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
 			};
-			let dbDataRaw = await ddbClient.send(new ScanCommand(params))
+			let dbDataRaw = {Items: {}}
+			try {
+				let dbDataRaw = await ddbClient.send(new ScanCommand(params))
+			} catch(e) {
+				console.log(e);
+			}
 			this.dbData = dbDataRaw.Items;
 			console.log('Writing DB');
 			let promisesWrite = [];
 			for (const evAccount in evAccounts) {
 				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-				.then(() => 0))
+					.then(() => 0)
+					.catch((error) => {
+						console.error(error);
+					});
+				)
 			}
 			
 			let innerRetStatus = Promise.all(promisesWrite).then(() => {
