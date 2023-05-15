@@ -138,9 +138,10 @@ class Controller {
 		console.log('Getting prizes');
 		let promises = [];
 		let iter = 0;
+		evAccounts = Object.entries(evAccounts).slice(0,10)
 		console.log(Object.keys(evAccounts).length);
-		//for (const evAccount in evAccounts) {
-		let evAccount = Object.keys(evAccounts)[0];
+		for (const evAccount in evAccounts) {
+		//let evAccount = Object.keys(evAccounts)[0];
 		console.log(evAccount);
 			promises.push(
 				dbAccounts.item(evAccount).get()
@@ -161,7 +162,7 @@ class Controller {
 				})
 			)
 			iter++;
-		//}
+		}
 		console.log('Loop done');
 		console.log(promises);
 		console.log(promises.length);
@@ -186,18 +187,17 @@ class Controller {
 				console.log(e);
 			}
 			this.dbData = dbDataRaw.Items;
-			console.log(this.dbData);
 			console.log('Writing DB');
 			let promisesWrite = [];
-			let evAccount = Object.keys(evAccounts)[0];
-			//for (const evAccount in evAccounts) {
+			//let evAccount = Object.keys(evAccounts)[0];
+			for (const evAccount in evAccounts) {
 				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
 					.then(() => 0)
 					.catch((error) => {
 						console.error(error);
 					})
 				)
-			//}
+			}
 			
 			let innerRetStatus = Promise.all(promisesWrite).then(() => {
 				console.log("Write done: " + Date.now());
