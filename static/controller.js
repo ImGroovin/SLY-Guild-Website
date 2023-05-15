@@ -139,6 +139,7 @@ class Controller {
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
 			promises.push(dbAccounts.item(evAccount).get()
+			.catch((e) => console.log(e))
 			.then((dbAccount) => {
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
 				return this.getEVPrizes(evAccount, dbPrizeTS);
