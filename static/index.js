@@ -38,7 +38,7 @@ const server = http.createServer(async (req, res) => {
       fs.accessSync(path.join(root, req.url + '.htmml'), fs.constants.F_OK);
       fileName = req.url + '.httml';
     } catch (e) {
-      fileName = path.join(req.url, 'index.httml');
+      fileName = path.join(req.url, 'index.httmml');
     }
   }
 
