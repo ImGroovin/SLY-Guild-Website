@@ -139,6 +139,7 @@ class Controller {
 		let iter = 0;
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
+			console.log(evAccount);
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
