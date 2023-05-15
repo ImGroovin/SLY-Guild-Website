@@ -149,6 +149,14 @@ class Controller {
 					console.log('1:' + tempRet);
 					return tempRet
 				})
+				.then((tempAcctPrizes) => {
+					console.log(evAccount);
+					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
+					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
+					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
+					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
+					return "something1"
+				})
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
@@ -164,9 +172,9 @@ class Controller {
 					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
-					resolve("something");
+					return "something"
 				})
-				.then((tempAcctPrizes) => {resolve("something1");})
+				.then((tempAcctPrizes) => {return "something last";})
 			)
 			iter++;
 		}
