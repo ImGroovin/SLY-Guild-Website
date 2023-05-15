@@ -146,12 +146,14 @@ class Controller {
 					return this.getEVPrizes(evAccount, dbPrizeTS);
 				})
 				.then((tempAcctPrizes) => {
+					console.log(evAccount);
 					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
 					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
 					resolve("something");
 				})
+				.then((tempAcctPrizes) => {resolve("something1");})
 			)
 			iter++;
 		}
