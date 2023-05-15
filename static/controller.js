@@ -164,7 +164,7 @@ class Controller {
 		console.log('Loop done');
 		console.log(promises);
 		console.log(promises.length);
-		let retStatus = Promise.all(promises).then(() => {
+		let retStatus = Promise.all(promises).then(async () => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
 			//		throw error;
