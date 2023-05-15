@@ -139,24 +139,7 @@ class Controller {
 		let iter = 0;
 		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
-			let tempProm = await dbAccounts.item(evAccount).get();
-			console.log(tempProm);
-			dbAccounts.item(evAccount).get()
-				.then((dbAccount) => {
-					console.log('Fetching1');
-					let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
-					let tempRet = this.getEVPrizes(evAccount, dbPrizeTS);
-					console.log('1:' + tempRet);
-					return tempRet
-				})
-				.then((tempAcctPrizes) => {
-					console.log(evAccount);
-					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
-					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
-					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
-					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
-					return "something1"
-				})
+			console.log(evAccount);
 			promises.push(
 				dbAccounts.item(evAccount).get()
 				.then((dbAccount) => {
