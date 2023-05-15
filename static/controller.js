@@ -184,10 +184,10 @@ class Controller {
 				Promise.all(promisesWrite).then(() => {
 					console.log("Write done: " + Date.now());
 					console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+					return {status: 'OK'};
 				});
 			});
 		});
-		return {status: 'OK'};
 	}
 
     async getEVAccounts() {
