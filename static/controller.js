@@ -136,6 +136,7 @@ class Controller {
 		}
 		console.log('Getting prizes');
 		let promises = [];
+		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
 			promises.push(dbAccounts.item(evAccount).get()
 			.then((dbAccount) => {
@@ -147,6 +148,7 @@ class Controller {
 				evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
 				evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
 				evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
+				console.log(`Added ${evAccount}`);
 			})
 			.then(() => 0))
 		}
