@@ -25,7 +25,7 @@ const server = http.createServer(async (req, res) => {
   const type = extension ? types[extension] : types.html;
   const supportedExtension = Boolean(type);
 
-  if (!supportedExtension && !req.url.includes('api')) {
+  if (!supportedExtension && !req.url.includes('api') && !req.url.includes('tool')) {
     res.writeHead(404, { 'Content-Type': 'text/html' });
     res.end('404: File not found');
     return;
@@ -36,9 +36,9 @@ const server = http.createServer(async (req, res) => {
   else if (!extension && !req.url.includes('api')) {
     try {
       fs.accessSync(path.join(root, req.url + '.html'), fs.constants.F_OK);
-      fileName = req.url + '.httml';
+      fileName = req.url + '.html';
     } catch (e) {
-      fileName = path.join(req.url, 'index.html');
+      fileName = 'index.html';
     }
   }
 
