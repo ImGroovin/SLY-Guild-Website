@@ -15,6 +15,7 @@ const types = {
   jpeg: 'image/jpeg',
   gif: 'image/gif',
   svg: 'image/svg',
+  json: 'application/json'
 };
 
 const root = path.normalize(path.resolve(directoryName));
