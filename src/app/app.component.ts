@@ -58,15 +58,19 @@ export class AppComponent implements AfterViewInit {
   scrollToSection(event: MouseEvent, target: string) {
 	let scrollElem: HTMLElement = <HTMLElement>document.getElementById('sly-wrapper');
 	let scrollTarget: HTMLElement = <HTMLElement>document.getElementById(target);
-	let targetPos = 0;
-	if (scrollTarget.offsetTop > 0 && scrollElem.clientHeight > scrollTarget.offsetTop) {
-		targetPos = (scrollElem.clientHeight + scrollTarget.offsetTop) * 0.9;
+	if (scrollTarget) {
+		let targetPos = 0;
+		if (scrollTarget.offsetTop > 0 && scrollElem.clientHeight > scrollTarget.offsetTop) {
+			targetPos = (scrollElem.clientHeight + scrollTarget.offsetTop) * 0.9;
+		} else {
+			targetPos = scrollTarget.offsetTop;
+		}
+		setTimeout(() => {
+			scrollElem.scrollTo({top: targetPos, left: 0, behavior: 'smooth'});
+		}, 100)
 	} else {
-		targetPos = scrollTarget.offsetTop;
+		this.router.navigate(['star-loyal']);
 	}
-	setTimeout(() => {
-		scrollElem.scrollTo({top: targetPos, left: 0, behavior: 'smooth'});
-	}, 100)
   }
   
   constructor(private router: Router, private location: Location) {
