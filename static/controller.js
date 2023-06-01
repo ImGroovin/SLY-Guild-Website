@@ -59,7 +59,6 @@ class Controller {
 	async addEntry(evAccount, evAccountData) {
 	//const addEntry = async(evAccount, evAccountData) => {
 		//let dbAccountAndFrags = dbData.filter(o => o.pk === `accounts#${evAccount}`);
-		//console.log(`Starting addEntry: ${evAccount} - ${evAccountData}`);
 		let dbAccount = this.dbData.filter(o => o.pk === `accounts#${evAccount}` && o.sk === `accounts#${evAccount}`);
 		let dbPzCnt = dbAccount[0] && dbAccount[0].pzCnt ? dbAccount[0].pzCnt : 0;
 		let dbMvCnt = dbAccount[0] && dbAccount[0].mvCnt ? dbAccount[0].mvCnt : 0;
@@ -135,44 +134,28 @@ class Controller {
 				console.log(e);
 			}
 		}
-		console.log('Getting prizes');
+		
 		let promises = [];
-		let iter = 0;
-		//evAccounts = Object.fromEntries(Object.entries(evAccounts).slice(1, 10))
-		console.log(Object.keys(evAccounts).length);
 		for (const evAccount in evAccounts) {
-		//let evAccount = Object.keys(evAccounts)[0];
-			console.log(evAccount);
-			promises.push(
-				dbAccounts.item(evAccount).get()
-				.then((dbAccount) => {
-					//console.log('Fetching');
-					let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
-					let tempRet = this.getEVPrizes(evAccount, dbPrizeTS);
-					console.log(`tempRet: ${tempRet}`);
-					return tempRet
-				})
-				.then((tempAcctPrizes) => {
-					//console.log(`Prizes: ${tempAcctPrizes}`);
-					evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
-					evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
-					evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
-					evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
-					return "something"
-				})
-			)
-			iter++;
+			promises.push(dbAccounts.item(evAccount).get()
+			.then((dbAccount) => {
+				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
+				return this.getEVPrizes(evAccount, dbPrizeTS);
+			})
+			.then((tempAcctPrizes) => {
+				evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
+				evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
+				evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
+				evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
+			})
+			.then(() => 0))
 		}
-		console.log('Loop done');
-		console.log(promises);
-		console.log(promises.length);
-		let retStatus = Promise.all(promises).then(async () => {
+		Promise.all(promises).then(() => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
 			//		throw error;
 			//	}
 			//});
-			console.log('Getting DB');
 			let params = {
 				FilterExpression: "begins_with(pk,:pk)",
 				ExpressionAttributeValues: {
@@ -180,48 +163,64 @@ class Controller {
 				},
 				TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
 			};
-			let dbDataRaw = {Items: {}}
-			try {
-				dbDataRaw = await ddbClient.send(new ScanCommand(params))
-			} catch(e) {
-				console.log(e);
-			}
-			this.dbData = dbDataRaw.Items;
-			console.log('Writing DB');
-			let promisesWrite = [];
-			//let evAccount = Object.keys(evAccounts)[0];
-			for (const evAccount in evAccounts) {
-				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-					.then(() => 0)
-					.catch((error) => {
-						console.error(error);
-					})
-				)
-			}
-			
-			let innerRetStatus = Promise.all(promisesWrite).then(() => {
-				console.log("Write done: " + Date.now());
-				console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
-				return {status: 'OK'};
+			ddbClient.send(new ScanCommand(params))
+			.then((dbDataRaw) => {
+				this.dbData = dbDataRaw.Items;
+				
+				let promisesWrite = [];
+				for (const evAccount in evAccounts) {
+					promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
+					.then(() => 0))
+				}
+				
+				Promise.all(promisesWrite).then(() => {
+					console.log("Write done: " + Date.now());
+					console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+				});
 			});
-			return innerRetStatus;
-		})
-		.catch((error) => {
-			console.error(error);
 		});
-		return retStatus;
 	}
 
-    async getEVAccounts() {
-
-		let params = {
+    async parallelScan(segment, total_segments, limit=50000,  next = undefined){
+        let results = []
+        do{
+          var params = {
 			FilterExpression: "begins_with(pk,:pk)",
 			ExpressionAttributeValues: {
 				':pk':'accounts#',
 			},
 			TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
-		};
-		let dbDataRaw = await ddbClient.send(new ScanCommand(params));
+            Limit: limit,
+            ScanIndexForward:false,
+            Segment: segment,
+            TotalSegments:total_segments,
+            ExclusiveStartKey: next,
+          };
+          let res = await ddbClient.send(new ScanCommand(params))
+          next = res.LastEvaluatedKey
+          results = results.concat(res.Items)
+        }while(next && results.length<limit)
+
+        let result = {
+          results,
+          length: results.length
+        }
+        if(next){
+          result.next = next
+        }
+        return result;
+    }
+
+    async getEVAccounts() {
+		let dbDataRaw = {
+			Items: []
+		}
+		let segment_results = await Promise.all([1,2,3,4,5].map(s=>{
+			return  this.parallelScan(s-1, 5)
+		}))
+		segment_results.forEach(s=>{
+			s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
+		})
 		let dbData = dbDataRaw.Items;
 		let dbAccounts = dbData.filter(o => o.keys_gsi === 'accounts');
 		let acctList = [];
