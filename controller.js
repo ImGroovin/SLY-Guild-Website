@@ -181,16 +181,46 @@ class Controller {
 		});
 	}
 
-    async getEVAccounts() {
-
-		let params = {
+    async parallelScan(segment, total_segments, limit=50000,  next = undefined){
+        let results = []
+        do{
+          var params = {
 			FilterExpression: "begins_with(pk,:pk)",
 			ExpressionAttributeValues: {
 				':pk':'accounts#',
 			},
 			TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
-		};
-		let dbDataRaw = await ddbClient.send(new ScanCommand(params));
+            Limit: limit,
+            ScanIndexForward:false,
+            Segment: segment,
+            TotalSegments:total_segments,
+            ExclusiveStartKey: next,
+          };
+          let res = await ddbClient.send(new ScanCommand(params))
+          next = res.LastEvaluatedKey
+          results = results.concat(res.Items)
+        }while(next && results.length<limit)
+
+        let result = {
+          results,
+          length: results.length
+        }
+        if(next){
+          result.next = next
+        }
+        return result;
+    }
+
+    async getEVAccounts() {
+		let dbDataRaw = {
+			Items: []
+		}
+		let segment_results = await Promise.all([1,2,3,4,5].map(s=>{
+			return  this.parallelScan(s-1, 5)
+		}))
+		segment_results.forEach(s=>{
+			s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
+		})
 		let dbData = dbDataRaw.Items;
 		let dbAccounts = dbData.filter(o => o.keys_gsi === 'accounts');
 		let acctList = [];
