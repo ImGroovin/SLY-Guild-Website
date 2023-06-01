@@ -44,6 +44,7 @@ const server = http.createServer(async (req, res) => {
 
   if (req.url === "/api/sageev" && req.method === "GET") {
     const sageev = await new controller().getEVAccounts();
+	console.log('LEN: ' + sageev.length);
 	res.writeHead(200, { "Content-Type": "application/json" });
 	res.end(JSON.stringify(sageev));
   } else if (req.url === "/api/updateev" && req.method === "GET") {
