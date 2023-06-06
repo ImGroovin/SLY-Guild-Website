@@ -155,7 +155,7 @@ class Controller {
 		console.log('Loop done');
 		console.log(promises);
 		console.log(promises.length);
-		Promise.all(promises).then(() => {
+		Promise.all(promises).then(async () => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
 			//		throw error;
@@ -171,17 +171,28 @@ class Controller {
 			//ddbClient.send(new ScanCommand(params))
 			//.then((dbDataRaw) => {
 			//	this.dbData = dbDataRaw.Items;
-				console.log('Writing DB');
-				let promisesWrite = [];
-				for (const evAccount in evAccounts) {
-					promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-					.then(() => 0))
-				}
-				
-				Promise.all(promisesWrite).then(() => {
-					console.log("Write done: " + Date.now());
-					console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
-				});
+			console.log('Getting DB data');
+			let dbDataRaw = {
+				Items: []
+			}
+			let segment_results = await Promise.all([1,2,3,4,5].map(s=>{
+				return  this.parallelScan(s-1, 5)
+			}))
+			segment_results.forEach(s=>{
+				s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
+			})
+			this.dbData = dbDataRaw.Items;
+			console.log('Writing DB');
+			let promisesWrite = [];
+			for (const evAccount in evAccounts) {
+				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
+				.then(() => 0))
+			}
+			
+			Promise.all(promisesWrite).then(() => {
+				console.log("Write done: " + Date.now());
+				console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+			});
 			//});
 		});
 	}
