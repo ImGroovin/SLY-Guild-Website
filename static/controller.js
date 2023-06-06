@@ -161,16 +161,16 @@ class Controller {
 			//		throw error;
 			//	}
 			//});
-			let params = {
-				FilterExpression: "begins_with(pk,:pk)",
-				ExpressionAttributeValues: {
-					':pk':'accounts#',
-				},
-				TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
-			};
-			ddbClient.send(new ScanCommand(params))
-			.then((dbDataRaw) => {
-				this.dbData = dbDataRaw.Items;
+			//let params = {
+			//	FilterExpression: "begins_with(pk,:pk)",
+			//	ExpressionAttributeValues: {
+			//		':pk':'accounts#',
+			//	},
+			//	TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
+			//};
+			//ddbClient.send(new ScanCommand(params))
+			//.then((dbDataRaw) => {
+			//	this.dbData = dbDataRaw.Items;
 				console.log('Writing DB');
 				let promisesWrite = [];
 				for (const evAccount in evAccounts) {
@@ -182,7 +182,7 @@ class Controller {
 					console.log("Write done: " + Date.now());
 					console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
 				});
-			});
+			//});
 		});
 	}
 
