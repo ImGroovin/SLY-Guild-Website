@@ -159,11 +159,11 @@ class Controller {
 		let keepTimer = setTimeout( function timeFn() {
 			console.log('Keep alive.');
 			if ( --keepAliveCnt > 0 ) {
-			  keepTimer = setTimeout( timeFn, 500 );
+			  keepTimer = setTimeout( timeFn, 1000 );
 			}
-		}, 500 );
+		}, 1000 );
 		console.log('After timer');
-		Promise.all(promises).then(async () => {
+		let retStatus = Promise.all(promises).then(async () => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
 			//		throw error;
@@ -194,15 +194,24 @@ class Controller {
 			let promisesWrite = [];
 			for (const evAccount in evAccounts) {
 				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-				.then(() => 0))
+				  .then(() => 0)
+				  .catch((error) => {
+						console.error(error);
+				  })
+				)
 			}
 			
-			Promise.all(promisesWrite).then(() => {
+			let innerRetStatus = Promise.all(promisesWrite).then(() => {
 				console.log("Write done: " + Date.now());
 				console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+				return {status: 'OK'};
 			});
-			//});
+			return innerRetStatus;
+		})
+		.catch((error) => {
+			console.error(error);
 		});
+		return retStatus;
 	}
 
     async parallelScan(segment, total_segments, limit=50000,  next = undefined){
