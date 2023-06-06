@@ -156,12 +156,13 @@ class Controller {
 		console.log(promises);
 		console.log('Length: ' + promises.length);
 		let keepAliveCnt = 15;
-		let activeTimer = setTimeout( function timeFn() {
-			console.log("Keep alive.");
+		let keepTimer = setTimeout( function timeFn() {
+			console.log('Keep alive.');
 			if ( --keepAliveCnt > 0 ) {
-			  activeTimer = setTimeout( timeFn, 1000 );
+			  keepTimer = setTimeout( timeFn, 500 );
 			}
-		}, 1000 );
+		}, 500 );
+		console.log('After timer');
 		Promise.all(promises).then(async () => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
