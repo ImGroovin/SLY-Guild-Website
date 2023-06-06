@@ -135,8 +135,10 @@ class Controller {
 			}
 		}
 		
+		console.log('Getting prizes');
 		let promises = [];
 		for (const evAccount in evAccounts) {
+			console.log(evAccount);
 			promises.push(dbAccounts.item(evAccount).get()
 			.then((dbAccount) => {
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
@@ -150,6 +152,9 @@ class Controller {
 			})
 			.then(() => 0))
 		}
+		console.log('Loop done');
+		console.log(promises);
+		console.log(promises.length);
 		Promise.all(promises).then(() => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
@@ -166,7 +171,7 @@ class Controller {
 			ddbClient.send(new ScanCommand(params))
 			.then((dbDataRaw) => {
 				this.dbData = dbDataRaw.Items;
-				
+				console.log('Writing DB');
 				let promisesWrite = [];
 				for (const evAccount in evAccounts) {
 					promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
