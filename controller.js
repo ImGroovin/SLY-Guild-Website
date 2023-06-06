@@ -138,7 +138,7 @@ class Controller {
 		console.log('Getting prizes');
 		let promises = [];
 		for (const evAccount in evAccounts) {
-			console.log(evAccount);
+			//console.log(evAccount);
 			promises.push(dbAccounts.item(evAccount).get()
 			.then((dbAccount) => {
 				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
@@ -155,6 +155,13 @@ class Controller {
 		console.log('Loop done');
 		console.log(promises);
 		console.log(promises.length);
+		let keepAliveCnt = 10;
+		let activeTimer = setTimeout( function timeFn() {
+			console.log("Keep alive.");
+			if ( --keepAliveCnt > 0 ) {
+			  activeTimer = setTimeout( timeFn, 2000 );
+			}
+		}, 2000 );
 		Promise.all(promises).then(async () => {
 			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
 			//	if (error) {
