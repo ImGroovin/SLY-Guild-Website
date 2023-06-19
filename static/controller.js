@@ -66,12 +66,14 @@ class Controller {
 		let dbAccount = this.dbData.filter(o => o.pk === `accounts#${evAccount}` && o.sk === `accounts#${evAccount}`);
 		let dbPzCnt = dbAccount[0] && dbAccount[0].pzCnt ? dbAccount[0].pzCnt : 0;
 		let dbMvCnt = dbAccount[0] && dbAccount[0].mvCnt ? dbAccount[0].mvCnt : 0;
-		await dbAccounts.set(evAccount, {
+
+		dbAccounts.set(evAccount, {
 			//mvCnt: dbMvCnt + evAccountData.mvCnt,
 			pzCnt: dbPzCnt + evAccountData.pzCnt,
 			//flCnt: evAccountData.flCnt,
 			pzTS: evAccountData.pzTS
 		});
+
 		for (const [keyPrizeCat, valuePrizeCat] of Object.entries(evAccountData.prizes)) {
 			let dbPrizeTierRaw = this.dbData.find(o => o.pk === `accounts#${evAccount}` && o.sk === `fragment#prizes#${keyPrizeCat}`);
 			let dbPrizeTier = dbPrizeTierRaw && Object.fromEntries(
@@ -81,10 +83,37 @@ class Controller {
 			let mergedPrizeTier = Object.entries(valuePrizeCat).reduce((acc, [key, value]) =>
 				({...acc, [key]: (acc[key] || 0) + value}), {...dbPrizeTier}
 			);
-			await dbAccounts.item(evAccount).fragment("prizes", keyPrizeCat).set(
+
+			dbAccounts.item(evAccount).fragment("prizes", keyPrizeCat).set(
 				mergedPrizeTier
 			);
+
 		}
+	}
+	
+	async midnightUpdate(dbAcctCommonPrizes) {
+		let dbPrize24Common = this.dbData.filter(o => o.pk === dbAcctCommonPrizes.pk && o.sk === `fragment#prizes24hrStart#common`);
+
+		let dbPrizeCurrentR4 = dbAcctCommonPrizes && Object.fromEntries(
+			Object.entries(dbAcctCommonPrizes)
+			.filter(([key]) => !['pk', 'sk','created','updated','cy_meta','ATLAS'].includes(key))
+		);
+		let dbPrize24R4 = dbPrize24Common[0] && Object.fromEntries(
+			Object.entries(dbPrize24Common[0])
+			.filter(([key]) => !['pk', 'sk','created','updated','cy_meta','ATLAS'].includes(key))
+		);
+		let diffPrize24 = Object.entries(dbPrizeCurrentR4).reduce((acc, [key, value]) =>
+			({...acc, [key]: value - (acc[key] || 0)}), {...dbPrize24R4}
+		);
+		let evAccount = dbAcctCommonPrizes.pk.split('#')[1];
+
+		dbAccounts.item(evAccount).fragment("prizes24hrStart", 'common').set(
+			dbPrizeCurrentR4
+		);
+		dbAccounts.item(evAccount).fragment("prizes24hr", 'common').set(
+			diffPrize24
+		);
+
 	}
 	
 	async updateRecentEVAccounts() {
@@ -223,6 +252,25 @@ class Controller {
 				async () => {
 					console.log("Prizes Time: " + (Date.now() - segStart)/1000);
 					segStart = Date.now();
+					
+					let midnight = new Date().setUTCHours(0,0,0,0);
+					if ((0 <= (Date.now() - midnight) && (Date.now() - midnight) < 600000)) {
+						let promisesMidnight = [];
+						let dbPrizesCommon = this.dbData.filter(o => o.sk === `fragment#prizes#common`);
+						for (const dbAcctCommonPrizes of dbPrizesCommon) {
+							promisesMidnight.push(this.midnightUpdate(dbAcctCommonPrizes)
+							  .then(() => 0)
+							  .catch((error) => {
+									console.error(error);
+							  })
+							)
+						}
+						
+						let midnightStatus = Promise.all(promisesMidnight).then(() => {
+							console.log("Midnight Time: " + (Date.now() - segStart)/1000);
+							segStart = Date.now();
+						});
+					}
 
 					console.log('Writing DB');
 					let promisesWrite = [];
@@ -240,6 +288,7 @@ class Controller {
 						console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
 						return {status: 'OK'};
 					});
+
 					return innerRetStatus;
 				}), timeoutLimit, Symbol());
 		} catch(e) {
