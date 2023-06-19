@@ -52,6 +52,10 @@ const server = http.createServer(async (req, res) => {
     const updateev = await new controller().updateEVAccounts();
 	res.writeHead(200, { "Content-Type": "application/json" });
 	res.end(JSON.stringify(updateev));
+  } else if (req.url === "/api/updaterecent" && req.method === "GET") {
+    const sageev = await new controller().updateRecentEVAccounts();
+	res.writeHead(200, { "Content-Type": "application/json" });
+	res.end(JSON.stringify(sageev));
   } else {
     const filePath = path.join(root, fileName);
     const isPathUnderRoot = path

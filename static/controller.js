@@ -21,21 +21,24 @@ class Controller {
 	async getEVPrizes(address, recentPrizeTS) {
 	//const getEVPrizes = async(address, recentPrizeTS) => {
 		let prizes = [];
+
 		try {
 			let prizesRaw = await fetch(`https://galaxy.staratlas.com/prizes/${address}`);
 			prizes = await prizesRaw.json();
 		} catch(e) {
 			console.log(e);
 		}
+
 		
 		//let prizeTotals = prizes.reduce(function (r, row) {
 		//	r[row.name] = r[row.name] + row.quantity || row.quantity;
 		//	return r;
 		//}, {});
-		
+
 		let prizeTotals = {};
 		let prizeCnt = 0;
 		let newRecentTS = 0;
+		
 		for (let prize of prizes) {
 			newRecentTS = prize.discoverTimestamp > newRecentTS ? prize.discoverTimestamp : newRecentTS;
 			if (prize.discoverTimestamp > recentPrizeTS) {
@@ -52,6 +55,7 @@ class Controller {
 				prizeCnt++;
 			}
 		}
+		
 		//console.log({recentTS: newRecentTS, count: prizeCnt, prizes: prizeTotals});
 		return {recentTS: newRecentTS, count: prizeCnt, prizes: prizeTotals};
 	}
@@ -63,9 +67,9 @@ class Controller {
 		let dbPzCnt = dbAccount[0] && dbAccount[0].pzCnt ? dbAccount[0].pzCnt : 0;
 		let dbMvCnt = dbAccount[0] && dbAccount[0].mvCnt ? dbAccount[0].mvCnt : 0;
 		await dbAccounts.set(evAccount, {
-			mvCnt: dbMvCnt + evAccountData.mvCnt,
+			//mvCnt: dbMvCnt + evAccountData.mvCnt,
 			pzCnt: dbPzCnt + evAccountData.pzCnt,
-			flCnt: evAccountData.flCnt,
+			//flCnt: evAccountData.flCnt,
 			pzTS: evAccountData.pzTS
 		});
 		for (const [keyPrizeCat, valuePrizeCat] of Object.entries(evAccountData.prizes)) {
@@ -82,13 +86,11 @@ class Controller {
 			);
 		}
 	}
-
-	async updateEVAccounts() {
-	//const updateEVAccounts = async() => {
+	
+	async updateRecentEVAccounts() {
+		let segStart = Date.now();
 		const programId = new solanaWeb3.PublicKey('TESTWCwvEv2idx6eZVQrFFdvEJqGHfVA1soApk2NFKQ');
-		// const fleetKey = new solanaWeb3.PublicKey('CcPb2iSqLHCDBEd8J5qBFsUkARcJ9AgB8UcAKHwhB9rk');
 		let fleetAccounts = await solanaConnection.getProgramAccounts(programId);
-		// let fleetAccount = fleetAccounts[0];
 		
 		let tempWallet = anchor.web3.Keypair.generate();
 		let anchorProvider = new anchor.AnchorProvider(solanaConnection, tempWallet, {
@@ -97,15 +99,11 @@ class Controller {
 		});
 		let anchorProg = new anchor.Program(idl, programId, anchorProvider);
 		let temp = new anchor.BorshAccountsCoder(idl);
-	//		let temp1 = temp.decode('Fleet', fleetAccount.account.data);
-	//		console.log(temp1);
-		
-		//let tempAcctPrizes = await getEVPrizes('G3VwAJ6Ya4ADbDb2ch2gkaNPxeDsRBocyyHNC7SpCXPh');
-		//let evAccounts = fleetAccounts.reduce(function (results, fleetAccount) {
+
 		let acctMvs = 0; //get acctMvs from DB
 		let evAccounts = {};
 		let fleets = {};
-
+		
 		for (const fleetAccount of fleetAccounts) {
 			try {
 				let evAccountData = temp.decode('Fleet', fleetAccount.account.data);
@@ -113,10 +111,6 @@ class Controller {
 				let evAccount = evAccountData.owner.toBase58();
 				let fleetKey = fleetAccount.pubkey.toBase58();
 				if (evLastWarp * 1000 > (Date.now() - 3600000)) {
-					//let dbFleet = await dbAccounts.item(evAccount).fragment("fleets", fleetKey).get();
-					//let dbFleet;
-					//let dbFleetTS = dbFleet && dbFleet.flSig ? dbFleet.flSig : null;
-					//let fleetData = await getTxCnt(new solanaWeb3.PublicKey(fleetKey), null, dbFleetTS);
 					let fleetData = {cnt: 0, lastWarp: 0, recentFleetSig: 0};
 					if (evAccount in evAccounts) {
 						evAccounts[evAccount].mvCnt += fleetData.cnt;
@@ -135,82 +129,123 @@ class Controller {
 			}
 		}
 		
-		console.log('Getting prizes');
-		let promises = [];
-		for (const evAccount in evAccounts) {
-			//console.log(evAccount);
-			promises.push(dbAccounts.item(evAccount).get()
-			.then((dbAccount) => {
-				let dbPrizeTS = dbAccount && dbAccount.props && dbAccount.props.pzTS ? dbAccount.props.pzTS : 0;
-				return this.getEVPrizes(evAccount, dbPrizeTS);
-			})
-			.then((tempAcctPrizes) => {
-				evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
-				evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
-				evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
-				evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
-			})
-			.then(() => 0))
+		console.log("Collect done: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
+		
+		const dbRecentAccounts = db.collection("recentAccounts");
+		let recentAccountList = await dbRecentAccounts.list();
+		let promisesDelete = [];
+		for (const account of recentAccountList.results) {
+			promisesDelete.push(
+				dbRecentAccounts.item(account.key).delete()
+			)
 		}
-		console.log('Loop done');
-		console.log(promises);
-		console.log('Length: ' + promises.length);
-		let keepAliveCnt = 15;
-		let keepTimer = setTimeout( function timeFn() {
-			console.log('Keep alive.');
-			if ( --keepAliveCnt > 0 ) {
-			  keepTimer = setTimeout( timeFn, 1000 );
-			}
-		}, 1000 );
-		console.log('After timer');
-		let retStatus = Promise.all(promises).then(async () => {
-			//fs.writeFile('evAccounts.json', JSON.stringify(evAccounts), (error) => {
-			//	if (error) {
-			//		throw error;
-			//	}
-			//});
-			//let params = {
-			//	FilterExpression: "begins_with(pk,:pk)",
-			//	ExpressionAttributeValues: {
-			//		':pk':'accounts#',
-			//	},
-			//	TableName: "cooperative-wasp-turtleneck-shirtCyclicDB",
-			//};
-			//ddbClient.send(new ScanCommand(params))
-			//.then((dbDataRaw) => {
-			//	this.dbData = dbDataRaw.Items;
-			console.log('Getting DB data');
-			let dbDataRaw = {
-				Items: []
-			}
-			let segment_results = await Promise.all([1,2,3,4,5].map(s=>{
-				return  this.parallelScan(s-1, 5)
-			}))
-			segment_results.forEach(s=>{
-				s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
-			})
-			this.dbData = dbDataRaw.Items;
-			console.log('Writing DB');
+		
+		let retStatus = Promise.all(promisesDelete).then(() => {
+			console.log("Delete done: " + (Date.now() - segStart)/1000);
+			segStart = Date.now();
 			let promisesWrite = [];
 			for (const evAccount in evAccounts) {
-				promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
-				  .then(() => 0)
-				  .catch((error) => {
-						console.error(error);
-				  })
+				promisesWrite.push(
+					dbRecentAccounts.set(evAccount)
 				)
 			}
-			
-			let innerRetStatus = Promise.all(promisesWrite).then(() => {
-				console.log("Write done: " + Date.now());
-				console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+			let writeStatus = Promise.all(promisesWrite).then(() => {
+				console.log("Write done: " + (Date.now() - segStart)/1000);
 				return {status: 'OK'};
 			});
-			return innerRetStatus;
-		})
-		.catch((error) => {
-			console.error(error);
+			return writeStatus;
 		});
+
+		return retStatus;
+	}
+
+	async updateEVAccounts() {
+		let segStart = Date.now();
+		let evAccounts = {};
+		const dbRecentAccounts = db.collection("recentAccounts");
+		let recentAccountList = await dbRecentAccounts.list();
+
+		console.log("recentAccountList: " + Object.keys(recentAccountList.results).length);
+		console.log("build evAccounts Time: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
+
+		let dbDataRaw = {
+			Items: []
+		}
+		let segment_results = await Promise.all([1,2,3,4,5].map(s=>{
+			return  this.parallelScan(s-1, 5)
+		}))
+		segment_results.forEach(s=>{
+			s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
+		})
+		this.dbData = dbDataRaw.Items;
+		
+		console.log("get DB Data Time: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
+		
+		let dbAccounts = this.dbData.filter(o => o.keys_gsi === 'accounts');
+
+		let promisesPrizes = [];
+		//for (const evAccount in evAccounts) {
+		for (const recentDBAcct of recentAccountList.results) {
+			let evAccount = recentDBAcct.key;
+			let tempDBAcct = dbAccounts.filter(o => o.sk === `accounts#${evAccount}` && o.pk === `accounts#${evAccount}`);
+			let dbPrizeTS = tempDBAcct[0] && tempDBAcct[0].pzTS ? tempDBAcct[0].pzTS : 0;
+			promisesPrizes.push(this.getEVPrizes(evAccount, dbPrizeTS)
+			  .then((tempAcctPrizes) => {
+				//evAccounts[evAccount].prizes = tempAcctPrizes.prizes;
+				//evAccounts[evAccount].pzCnt = tempAcctPrizes.count;
+				//evAccounts[evAccount].pzTS = tempAcctPrizes.recentTS;
+				//evAccounts[evAccount].flCnt = Object.keys(evAccounts[evAccount].fleets).length;
+				evAccounts[evAccount] = {prizes: tempAcctPrizes.prizes, pzCnt: tempAcctPrizes.count, pzTS: tempAcctPrizes.recentTS, flCnt: 0};
+			  })
+			  .catch((error) => {
+					console.error(error);
+			  })
+			)
+		}
+		
+		console.log('Length: ' + promisesPrizes.length);
+		let timeoutLimit = 28500 - Math.floor((Date.now() - this.totalStart));
+		
+		const timeout = (prom, time, exception) => {
+			let timer;
+			return Promise.race([
+				prom,
+				new Promise((_r, rej) => timer = setTimeout(rej, time, exception))
+			]).finally(() => clearTimeout(timer));
+		}
+
+		let retStatus = {status: 'Timed Out'};
+		try {
+			retStatus = await timeout(Promise.all(promisesPrizes).then(
+				async () => {
+					console.log("Prizes Time: " + (Date.now() - segStart)/1000);
+					segStart = Date.now();
+
+					console.log('Writing DB');
+					let promisesWrite = [];
+					for (const evAccount in evAccounts) {
+						promisesWrite.push(this.addEntry(evAccount, evAccounts[evAccount])
+						  .then(() => 0)
+						  .catch((error) => {
+								console.error(error);
+						  })
+						)
+					}
+					
+					let innerRetStatus = Promise.all(promisesWrite).then(() => {
+						console.log("DB Time: " + (Date.now() - segStart)/1000);
+						console.log("Total Time: " + (Date.now() - this.totalStart)/1000);
+						return {status: 'OK'};
+					});
+					return innerRetStatus;
+				}), timeoutLimit, Symbol());
+		} catch(e) {
+			console.log('Timeout reached');
+			console.log(e);
+		}
 		return retStatus;
 	}
 
