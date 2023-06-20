@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-tool-sage',
@@ -11,9 +12,13 @@ import { MatSort } from '@angular/material/sort';
 })
 export class ToolSageComponent implements AfterViewInit {
   public tmpResp:any;
-  displayedColumns = ['acct', 'pzCnt'];
-  displayedPrizeColumns : any[] = [];
+  displayedColumns = ['acct', 'pzCnt', 'dailyPzCnt', 'common', 'uncommon', 'rare', 'epic', 'legendary'];
+  displayedPrizeColumns : any[] = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
   dataSource!: MatTableDataSource<any>;
+  dispAmmoTotal! : '';
+  dispFoodTotal! : '';
+  dispFuelTotal! : '';
+  dispToolTotal! : '';
   
   @ViewChild('paginator') paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -21,11 +26,6 @@ export class ToolSageComponent implements AfterViewInit {
   constructor( private http : HttpClient ) {}
   
   ngOnInit(): void {
-    //let ev: Array = [];
-	//ev = [
-    //  {account: "E9iWzYDuPUApcgqPDgbBfinzWWRpWHxzpdQq49kSHGzG", data: "test"}
-    //];
-	//this.dataSource = new MatTableDataSource(ev);
   
     this.http.get('/api/sageev')
     .subscribe(Response => {
@@ -37,6 +37,7 @@ export class ToolSageComponent implements AfterViewInit {
 			
 			formattedItem['acct'] = account.acct;
 			formattedItem['pzCnt'] = account.pzCnt;
+			formattedItem['dailyPzCnt'] = account.prizes24hr;
 			for (const [keyPrizes, valuePrizes] of Object.entries(account.prizes)) {
 				// formattedItem[keyPrizes] = JSON.stringify(valuePrizes, undefined, 2);
 				formattedItem[keyPrizes] = valuePrizes;
@@ -52,14 +53,26 @@ export class ToolSageComponent implements AfterViewInit {
 			}
 			formattedData.push(formattedItem);
 		}
+		
+		this.dispAmmoTotal = ev.reduce((acc, o) => {let oAmmo = o.prizes24hr && o.prizes24hr.Ammo ? o.prizes24hr.Ammo : 0; return acc + oAmmo}, 0)
+		this.dispFoodTotal = ev.reduce((acc, o) => {let oFood = o.prizes24hr && o.prizes24hr.Food ? o.prizes24hr.Food : 0; return acc + oFood}, 0)
+		this.dispFuelTotal = ev.reduce((acc, o) => {let oFuel = o.prizes24hr && o.prizes24hr.Fuel ? o.prizes24hr.Fuel : 0; return acc + oFuel}, 0)
+		this.dispToolTotal = ev.reduce((acc, o) => {let oTool = o.prizes24hr && o.prizes24hr.Toolkits ? o.prizes24hr.Toolkits : 0; return acc + oTool}, 0)
+		
 		this.dataSource = new MatTableDataSource(formattedData);
+		this.dataSource.filterPredicate = (data: any, filter: string) => {
+			const dataStr = JSON.stringify(data).toLowerCase();
+			return dataStr.indexOf(filter) != -1;
+		}
 		this.dataSource.paginator = this.paginator;
 		this.dataSource.sortingDataAccessor = (item, property) => {
 			switch(property) {
+				case 'dailyPzCnt': return item.dailyPzCnt ? item.dailyPzCnt.tierCnt : 0;
 				case 'common': return item.common ? item.common.tierCnt : 0;
 				case 'uncommon': return item.uncommon ? item.uncommon.tierCnt : 0;
 				case 'rare': return item.rare ? item.rare.tierCnt : 0;
 				case 'epic': return item.epic ? item.epic.tierCnt : 0;
+				case 'legendary': return item.legendary ? item.legendary.tierCnt : 0;
 				default: return item[property];
 			}
 		};
@@ -73,8 +86,8 @@ export class ToolSageComponent implements AfterViewInit {
   }
   
   applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    let filterValue = (event.target as HTMLInputElement).value.trim();
+    filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 }

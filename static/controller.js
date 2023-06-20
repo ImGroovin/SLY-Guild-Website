@@ -329,6 +329,7 @@ class Controller {
     }
 
     async getEVAccounts() {
+		let segStart = Date.now();
 		let dbDataRaw = {
 			Items: []
 		}
@@ -339,22 +340,40 @@ class Controller {
 			s.results.forEach(sr=>{dbDataRaw.Items.push(sr)})
 		})
 		let dbData = dbDataRaw.Items;
+		console.log("get db Time: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
 		let dbAccounts = dbData.filter(o => o.keys_gsi === 'accounts');
+		console.log("filter accounts Time: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
 		let acctList = [];
+		console.log('dbData: ' + dbData.length);
+		let dbPrizes = dbData.filter(o => o.sk.startsWith('fragment#prizes#'));
+		let mappedPrizes = Object.assign({},...dbPrizes.map(item => ({[item.pk.split('#')[1] + item.sk.split('#')[2]]: item})));
+		let dbPrizes24hr = dbData.filter(o => o.sk.startsWith('fragment#prizes24hr#'));
+		let mappedPrizes24hr = Object.assign({},...dbPrizes24hr.map(item => ({[item.pk.split('#')[1]]: item})));
+		let prizeTiers = [...new Set(dbPrizes.map(item => {return item.sk.split('#')[2]}))];
+		console.log("map Time: " + (Date.now() - segStart)/1000);
+		segStart = Date.now();
+		
 		for (let dbAcct of dbAccounts) {
 			let acctName = dbAcct.pk.split('#')[1];
-			let acctPrizeTiers = dbData.filter(o => o.pk === `accounts#${acctName}` && o.sk.startsWith('fragment#prizes'));
 			let acctPrizes = {};
-			for (let acctPrizeTierRaw of acctPrizeTiers) {
-				let acctPrizeTierName = acctPrizeTierRaw.sk.split('#')[2];
-				let acctPrizeTier = Object.fromEntries(
-					Object.entries(acctPrizeTierRaw)
+			for (let prizeTier of prizeTiers) {
+				let acctPrizeTier = mappedPrizes[acctName + prizeTier] && Object.fromEntries(
+					Object.entries(mappedPrizes[acctName + prizeTier])
 					.filter(([key]) => !['pk', 'sk','created','updated','cy_meta'].includes(key))
 				);
-				acctPrizes[acctPrizeTierName] = acctPrizeTier;
+				acctPrizes[prizeTier] = acctPrizeTier;
 			}
-			acctList.push({acct: acctName, pzCnt: dbAcct.pzCnt, prizes: acctPrizes});
+			let acctPrize24hr = mappedPrizes24hr[acctName] && Object.fromEntries(
+					Object.entries(mappedPrizes24hr[acctName])
+					.filter(([key]) => !['pk', 'sk','created','updated','cy_meta'].includes(key))
+				);
+			acctList.push({acct: acctName, pzCnt: dbAcct.pzCnt, prizes: acctPrizes, prizes24hr: acctPrize24hr});
 		}
+
+					
+		console.log("build json Time: " + (Date.now() - segStart)/1000);
         return new Promise((resolve, _) => resolve(acctList));
     }
 }
